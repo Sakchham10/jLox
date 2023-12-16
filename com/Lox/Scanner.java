@@ -36,6 +36,8 @@ public class Scanner {
     Scanner(String source){
         this.source = source;
     }
+
+    //Scans the file character by character and adds token to the token list
     List<Token>scanTokens(){
         while (!isAtEnd()){
             start = current;
@@ -47,6 +49,8 @@ public class Scanner {
     private boolean isAtEnd(){
         return current >=source.length();
     }
+
+    //Consumes the char and advances to the next char
     private char advance(){
         return source.charAt(current++);
     }
@@ -71,6 +75,7 @@ public class Scanner {
         if (current +1 >= source.length()) return '\0';
         return source.charAt(current+1);
     }
+
     private void string(){
         while (peek() != '"' && !isAtEnd()){
             if (peek() == '\n') line++;
@@ -145,6 +150,7 @@ public class Scanner {
                     // A comment goes until the end of the line.
                     while (peek() != '\n' && !isAtEnd()) advance();
                 }
+                // Multiline comments use /* */
                 else if (match('*')){
                     while (peek() != '*' && peekNext() != '/') {
                         if (isAtEnd()){
@@ -186,4 +192,3 @@ public class Scanner {
         }
     }
 }
-

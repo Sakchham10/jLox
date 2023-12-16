@@ -6,6 +6,7 @@ public class Token {
     final Object literal;
     final int line;
 
+    //Adding line number for error handling
     Token(TokenType type, String lexeme, Object literal, int line){
         this.type = type;
         this.lexeme = lexeme;
