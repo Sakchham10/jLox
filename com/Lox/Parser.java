@@ -14,6 +14,7 @@ class Parser {
 
     Expr parse(){
         try{
+            System.out.println(this.tokens);
             return expression();
         }catch(ParseError error){
             return  null;
