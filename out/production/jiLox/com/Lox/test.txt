@@ -1,1 +1,4 @@
-1+2+3 "Hey"
+print "one";
+print true;
+print 1+2;
+print "Hey";

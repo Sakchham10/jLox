@@ -20,14 +20,15 @@ public class GenerateAst {
                 "Literal  : Object value",
                 "Unary : Token operator, Expr right"
         ));
+        defineAst(outputDir,"Stmt",Arrays.asList("Expression : Expr expression","Print : Expr expression"));
     }
 
     private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
         String path = outputDir + "/" + baseName + ".java";
-        File myObj = new File("/Users/sakchhamsangroula/Projects/Expr.java");
+        File myObj = new File("/Users/sakchhamsangroula/Lox/jiLox/com/Lox/Stmt.java");
         System.out.println(path);
         PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8);
-        writer.println("package com.lox;");
+        writer.println("package com.Lox;");
         writer.println();
         writer.println("import java.util.List;");
         writer.println();
@@ -72,7 +73,7 @@ public class GenerateAst {
         for (String field : fields) {
             writer.println(" final " + field + ';');
         }
-        writer.println(" }");
+
         // Visitor pattern.
         writer.println();
         writer.println("    @Override");
@@ -80,6 +81,7 @@ public class GenerateAst {
         writer.println("      return visitor.visit" +
                 className + baseName + "(this);");
         writer.println("    }");
+        writer.println(" }");
         // Fields.
 
 

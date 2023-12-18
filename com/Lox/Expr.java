@@ -20,11 +20,11 @@ abstract class Expr {
  final Expr left;
  final Token operator;
  final Expr right;
+
      @Override
      <R> R accept(Visitor<R> visitor) {
          return visitor.visitBinaryExpr(this);
      }
-
  }
 
  static class Grouping extends Expr {
@@ -33,6 +33,7 @@ abstract class Expr {
 }
 
  final Expr expression;
+
      @Override
      <R> R accept(Visitor<R> visitor) {
          return visitor.visitGroupingExpr(this);
@@ -51,11 +52,13 @@ abstract class Expr {
      }
  }
 
+
  static class Unary extends Expr {
  Unary(Token operator, Expr right) {
  this.operator = operator;
  this.right = right;
 }
+
  final Token operator;
  final Expr right;
      @Override
@@ -63,5 +66,8 @@ abstract class Expr {
          return visitor.visitUnaryExpr(this);
      }
  }
+
+
+
 
 }
