@@ -16,12 +16,12 @@ class Parser {
     List<Stmt> parse(){
         List<Stmt> statements = new ArrayList<>();
         while(!isAtEnd()){
-            statements.add(statements());
+            statements.add(declaration());
         }
         return statements;
     }
 
-    private Stmt statements(){
+    private Stmt statement(){
     if(match(PRINT)) return printStatement();
     return expressionStatement();
     }
@@ -32,6 +32,16 @@ class Parser {
         return new Stmt.Print(value);
     }
 
+    private Stmt varDeclaration(){
+        Token name = consume(IDENTIFIER,"Expect variable name");
+        Expr initializer = null;
+        if(match(EQUAL)){
+            initializer = expression();
+        }
+        consume(SEMICOLON,"Expect ';' after variable declaration");
+        return new Stmt.Var(name,initializer);
+    }
+
     private Stmt expressionStatement(){
         Expr expr = expression();
         consume(SEMICOLON,"Expect ';' after expression");
@@ -40,6 +50,16 @@ class Parser {
 
     private Expr expression(){
         return equality();
+    }
+
+    private Stmt declaration(){
+        try{
+            if(match(VAR)) return varDeclaration();
+            return statement();
+        }catch (ParseError error){
+            synchronize();
+            return null;
+        }
     }
 
     private Expr equality(){
@@ -98,6 +118,9 @@ class Parser {
         if(match(NUMBER,STRING)){
             return new Expr.Literal(previous().literal);
         }
+        if(match(IDENTIFIER)){
+            return new Expr.Variable(previous());
+        }
         if (match(LEFT_PAREN)){
             Expr expr = expression();
             consume(RIGHT_PAREN, "Expect ')' after expression.");
@@ -115,6 +138,7 @@ class Parser {
         }
         return  false;
     }
+
     private Token consume(TokenType type,String message){
         if(check(type)) return  advance();
         throw error(peek(),message);

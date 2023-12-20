@@ -18,15 +18,14 @@ public class GenerateAst {
                 "Binary : Expr left, Token operator, Expr right",
                 "Grouping : Expr expression",
                 "Literal  : Object value",
-                "Unary : Token operator, Expr right"
+                "Unary : Token operator, Expr right",
+                "Variable : Token name"
         ));
-        defineAst(outputDir,"Stmt",Arrays.asList("Expression : Expr expression","Print : Expr expression"));
+        defineAst(outputDir,"Stmt",Arrays.asList("Expression : Expr expression","Print : Expr expression","Var: Token name, Expr initializer"));
     }
 
     private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
         String path = outputDir + "/" + baseName + ".java";
-        File myObj = new File("/Users/sakchhamsangroula/Lox/jiLox/com/Lox/Stmt.java");
-        System.out.println(path);
         PrintWriter writer = new PrintWriter(path, StandardCharsets.UTF_8);
         writer.println("package com.Lox;");
         writer.println();
