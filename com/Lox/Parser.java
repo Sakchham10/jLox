@@ -7,11 +7,9 @@ import static com.Lox.TokenType.*;
 
 class Parser {
 
-    private static class ParseError extends RuntimeException {
-    }
+    private final List<Token> tokens;
 
     ;
-    private final List<Token> tokens;
     private int current = 0;
 
     Parser(List<Token> tokens) {
@@ -27,9 +25,22 @@ class Parser {
     }
 
     private Stmt statement() {
+        if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
-        if(match(LEFT_BRACE)) return new Stmt.Block(block());
+        if (match(LEFT_BRACE)) return new Stmt.Block(block());
         return expressionStatement();
+    }
+
+    private Stmt ifStatement() {
+        consume(LEFT_PAREN, "Expect '(' after 'if' .");
+        Expr condition = expression();
+        consume(RIGHT_PAREN, "Expect ')' after 'if'.");
+        Stmt thenBranch = statement();
+        Stmt elseBranch = null;
+        if (match(ELSE)) {
+            elseBranch = statement();
+        }
+        return new Stmt.If(condition, thenBranch, elseBranch);
     }
 
     private Stmt printStatement() {
@@ -54,17 +65,18 @@ class Parser {
         return new Stmt.Expression(expr);
     }
 
-    private List<Stmt> block(){
+    private List<Stmt> block() {
         List<Stmt> statements = new ArrayList<>();
-        while (!check(RIGHT_BRACE) && !isAtEnd()){
+        while (!check(RIGHT_BRACE) && !isAtEnd()) {
             statements.add(declaration());
         }
-        consume(RIGHT_BRACE,"Expected '}' after block");
+        consume(RIGHT_BRACE, "Expected '}' after block");
         return statements;
     }
 
     private Expr assignment() {
-        Expr expr = equality();
+
+        Expr expr = or();
         if (match(EQUAL)) {
             Token equals = previous();
             Expr value = assignment();
@@ -75,6 +87,29 @@ class Parser {
             error(equals, "Invalid assignment target.");
         }
         return expr;
+    }
+
+    private Expr or() {
+        Expr expr = and();
+        while (match(OR)) {
+            Token operator = previous();
+            Expr right = and();
+            expr = new Expr.Logical(expr, operator, right);
+
+        }
+        return expr;
+    }
+
+    private Expr and() {
+        Expr expr = equality();
+        while (match(AND)) {
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Expr.Logical(expr, operator, right);
+
+        }
+        return expr;
+
     }
 
     private Expr expression() {
@@ -217,6 +252,9 @@ class Parser {
             }
             advance();
         }
+    }
+
+    private static class ParseError extends RuntimeException {
     }
 
 }

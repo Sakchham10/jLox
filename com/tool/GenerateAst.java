@@ -15,15 +15,8 @@ public class GenerateAst {
         }
         String outputDir = args[0];
 
-        defineAst(outputDir, "Expr", Arrays.asList(
-                "Assign : Token name, Expr value",
-                "Binary : Expr left, Token operator, Expr right",
-                "Grouping : Expr expression",
-                "Literal  : Object value",
-                "Unary : Token operator, Expr right",
-                "Variable : Token name"
-        ));
-        defineAst(outputDir,"Stmt",Arrays.asList("Expression : Expr expression","Print : Expr expression","Var: Token name, Expr initializer","Block : List<Stmt> statements"));
+        defineAst(outputDir, "Expr", Arrays.asList("Assign : Token name, Expr value", "Binary : Expr left, Token operator, Expr right", "Grouping : Expr expression", "Literal  : Object value","Logical :Expr left, Token operator, Expr right", "Unary : Token operator, Expr right", "Variable : Token name"));
+        defineAst(outputDir, "Stmt", Arrays.asList("Expression : Expr expression", "Print : Expr expression", "If : Expr condition, Stmt thenBranch, Stmt elseBranch", "Var: Token name, Expr initializer", "Block : List<Stmt> statements"));
     }
 
     private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
@@ -51,8 +44,7 @@ public class GenerateAst {
         writer.println("  interface Visitor<R> {");
         for (String type : types) {
             String typeName = type.split(":")[0].trim();
-            writer.println("    R visit" + typeName + baseName + "(" +
-                    typeName + " " + baseName.toLowerCase() + ");");
+            writer.println("    R visit" + typeName + baseName + "(" + typeName + " " + baseName.toLowerCase() + ");");
         }
         writer.println("  }");
     }
@@ -79,14 +71,10 @@ public class GenerateAst {
         writer.println();
         writer.println("    @Override");
         writer.println("    <R> R accept(Visitor<R> visitor) {");
-        writer.println("      return visitor.visit" +
-                className + baseName + "(this);");
+        writer.println("      return visitor.visit" + className + baseName + "(this);");
         writer.println("    }");
         writer.println(" }");
         // Fields.
-
-
-
 
 
     }
