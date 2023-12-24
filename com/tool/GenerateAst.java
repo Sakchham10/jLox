@@ -1,6 +1,5 @@
 package com.tool;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -15,8 +14,18 @@ public class GenerateAst {
         }
         String outputDir = args[0];
 
-        defineAst(outputDir, "Expr", Arrays.asList("Assign : Token name, Expr value", "Binary : Expr left, Token operator, Expr right", "Grouping : Expr expression", "Literal  : Object value","Logical :Expr left, Token operator, Expr right", "Unary : Token operator, Expr right", "Variable : Token name"));
-        defineAst(outputDir, "Stmt", Arrays.asList("Expression : Expr expression", "Print : Expr expression", "If : Expr condition, Stmt thenBranch, Stmt elseBranch", "Var: Token name, Expr initializer", "Block : List<Stmt> statements"));
+        defineAst(outputDir, "Expr", Arrays.asList("Assign : Token name, Expr value",
+                "Binary : Expr left, Token operator, Expr right",
+                "Grouping : Expr expression",
+                "Literal  : Object value",
+                "Logical :Expr left, Token operator, Expr right",
+                "Unary : Token operator, Expr right", "Variable : Token name"));
+        defineAst(outputDir, "Stmt", Arrays.asList("Expression : Expr expression",
+                "Print : Expr expression",
+                "If : Expr condition, Stmt thenBranch, Stmt elseBranch",
+                "While : Expr condition, Stmt body",
+                "Var: Token name, Expr initializer",
+                "Block : List<Stmt> statements"));
     }
 
     private static void defineAst(String outputDir, String baseName, List<String> types) throws IOException {
