@@ -107,7 +107,7 @@ public class Scanner {
         addToken(NUMBER,Double.parseDouble(source.substring(start,current)));
     }
     private boolean isAlpha(char c){
-        return (c >='A' && c <= 'Z') || (c >='a' && c<= 'x') || c== '_';
+        return (c >='A' && c <= 'Z') || (c >='a' && c<= 'z') || c== '_';
     }
     private boolean isAlphaNumeric(char c){
         return  isAlpha(c) || isDigit(c);
